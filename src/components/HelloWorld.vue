@@ -5,6 +5,7 @@
     <input type="text" placeholder="Rechercher...">
     <button type="submit">Go</button>
     </form>
+    <button style="position: absolute; top: 0; left: 0;">Login</button>
   </div>
 </template>
 
