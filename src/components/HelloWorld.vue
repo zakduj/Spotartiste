@@ -5,7 +5,7 @@
     <input type="text" placeholder="Rechercher...">
     <button type="submit">Go</button>
     </form>
-    <button style="position: absolute; top: 0; right: 0;">Login</button>
+    <button @click="login" >Login</button>
   </div>
 </template>
 
@@ -14,6 +14,13 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  methods: {
+    login() {
+      const SPOTIFY_CLIENT_ID = "your_client_id";
+      const SPOTIFY_REDIRECT_URI = "your_redirect_uri";
+      window.location.href = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${SPOTIFY_REDIRECT_URI}`;
+    }
   }
 }
 </script>
