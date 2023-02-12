@@ -5,7 +5,9 @@
     <input type="text" placeholder="Rechercher...">
     <button type="submit">Go</button>
     </form>
-    <button @click="login" >Login</button>
+    <template v-if="!isConnected">
+      <button @click="login">Login</button>
+    </template>
   </div>
 </template>
 
@@ -15,11 +17,17 @@ export default {
   props: {
     msg: String
   },
+  data() {
+    return {
+      isConnected: false
+    };
+  },
   methods: {
     login() {
       const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
       const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
       window.location.href = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${SPOTIFY_REDIRECT_URI}`;
+      this.isConnected = true;
     }
   }
 }
