@@ -17,8 +17,8 @@ export default {
   },
   methods: {
     login() {
-      const SPOTIFY_CLIENT_ID = "your_client_id";
-      const SPOTIFY_REDIRECT_URI = "your_redirect_uri";
+      const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
+      const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
       window.location.href = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${SPOTIFY_REDIRECT_URI}`;
     }
   }
