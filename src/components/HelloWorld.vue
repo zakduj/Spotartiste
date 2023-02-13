@@ -19,7 +19,13 @@ export default {
     login() {
       const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
       const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
-      window.location.href = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${SPOTIFY_REDIRECT_URI}`;
+      const searchParams = new URLSearchParams();
+      
+      searchParams.set('client_id', SPOTIFY_CLIENT_ID);
+      searchParams.set('response_type', 'code');
+      searchParams.set('redirect_uri', SPOTIFY_REDIRECT_URI);
+
+      window.location.href = `https://accounts.spotify.com/authorize?${searchParams.toString()}`;
     }
   }
 }
