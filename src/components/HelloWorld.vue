@@ -3,7 +3,7 @@
     <h1>{{ msg }}</h1>
     <form>
     <input type="text" placeholder="Rechercher...">
-    <button type="submit">Go</button>
+    <button type="submit" @click.prevent="searchArtists">Go</button>
     </form>
   </div>
 </template>
@@ -78,6 +78,27 @@ export default {
       }
 
       return randomString;
+    },
+    searchArtists() {
+      const accessToken = localStorage.getItem('access_token');
+
+      if (!accessToken) {
+        console.error('Access token non trouvé');
+        return;
+      }
+
+      axios.get(`https://api.spotify.com/v1/search?q=${this.searchTerm}&type=artist`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+      .then(response => {
+        const artists = response.data.artists.items;
+        console.log(artists);
+      })
+      .catch(error => {
+        console.error(error);
+      });
     }
   }
 } 
