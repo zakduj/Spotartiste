@@ -19,8 +19,36 @@ export default {
     msg: String
   },
   mounted() {
-    this.login();
-  },
+    if (window.location.search.includes('code=')) {
+    // Extraire le code de l'URL de la requête
+    const code = window.location.search.split('code=')[1].split('&')[0];
+
+    // Vérifier l'état dans le cookie pour s'assurer que cela correspond à la requête d'autorisation
+    const state = document.cookie.split(this.stateKey + '=')[1].split(';')[0];
+    if (state === null || state !== this.state.state) {
+      console.error('Le cookie d\'état ne correspond pas à la requête d\'autorisation');
+      return;
+    }
+
+    // Éliminer l'état du cookie
+    document.cookie = this.stateKey + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+
+    // Effectuer une requête pour échanger le code contre un jeton d'accès
+    axios.post('/api/token', { code, state })
+      .then(response => {
+        const accessToken = response.data.access_token;
+
+        // Stocker le jeton d'accès pour une utilisation ultérieure
+        localStorage.setItem('access_token', accessToken);
+
+        // Rediriger vers la page d'accueil
+        this.$router.push('/');
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+},
   methods: {
     login() {
       const state = this.generateRandomString(16);
