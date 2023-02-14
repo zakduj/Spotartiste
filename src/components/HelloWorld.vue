@@ -1,6 +1,10 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+    <form>
+    <input type="text" placeholder="Rechercher...">
+    <button type="submit">Go</button>
+    </form>
   </div>
 </template>
 <script>
