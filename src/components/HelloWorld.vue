@@ -51,10 +51,10 @@ export default {
       return randomString;
     },
   },
-  getAccessToken(code, state) {
-    const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
-    const SPOTIFY_CLIENT_SECRET = 'c947b3eb664844898f92f74e733969f0';
-    const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
+  // getAccessToken(code, state) {
+  //   const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
+  //   const SPOTIFY_CLIENT_SECRET = 'c947b3eb664844898f92f74e733969f0';
+  //   const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
       
     // const authOptions = {
     //   method: 'POST',
@@ -69,7 +69,7 @@ export default {
     //     grant_type: 'authorization_code'
     //   }).toString(),
     // }
-  }
+  // }
 } 
 </script>
 <style scoped>
