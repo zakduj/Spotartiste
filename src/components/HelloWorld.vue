@@ -1,25 +1,9 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <form>
-    <input type="text" placeholder="Rechercher...">
-    <button type="submit">Go</button>
-    </form>
-      <button @click="login">Login</button>
   </div>
 </template>
 <script>
-function generateRandomString(length) {
-  let randomString = '';
-  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  for (let i = 0; i < length; i++) {
-    randomString += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-
-  return randomString;
-}
-
 export default {
   name: 'HelloWorld',
   data() {
@@ -30,15 +14,17 @@ export default {
   props: {
     msg: String
   },
+  mounted() {
+    this.login();
+  },
   methods: {
     login() {
-      const state = generateRandomString(16);
+      const state = this.generateRandomString(16);
       document.cookie = `${this.stateKey}=${state};max-age=3600`;
       const scope = 'user-read-private user-read-email';
 
       const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
       const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
-      
       
       const searchParams = new URLSearchParams();
       searchParams.set('client_id', SPOTIFY_CLIENT_ID);
@@ -48,11 +34,20 @@ export default {
       searchParams.set('scope', scope);
 
       window.location.href = `https://accounts.spotify.com/authorize?${searchParams.toString()}`;
+    },
+    generateRandomString(length) {
+      let randomString = '';
+      let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+      for (let i = 0; i < length; i++) {
+        randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+
+      return randomString;
     }
   }
 } 
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
   margin: 40px 0 0;
