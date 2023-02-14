@@ -40,11 +40,17 @@ export default {
       window.location.href = `https://accounts.spotify.com/authorize?${searchParams.toString()}`;
     },
     generateRandomString(length) {
-      let randomString = Math.random().toString(36).slice(-length);
-      return randomString;
+    let randomString = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (let i = 0; i < length; i++) {
+      randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    return randomString;
     }
   }
-}
+} 
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
