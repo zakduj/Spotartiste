@@ -19,7 +19,9 @@ export default {
       accessToken: null,
       refreshToken: null,
       expiresIn: null,
-      artist: null
+      artist: null,
+      code: null,
+      state: null
     };
   },
   props: {
@@ -41,6 +43,9 @@ export default {
     searchParams.set('scope', scope);
 
     window.location.href = `https://accounts.spotify.com/authorize?${searchParams.toString()}`
+
+    this.state = state;
+    this.code = this.$route.query.code;
   },
   methods: {
     generateRandomString(length) {
@@ -54,7 +59,7 @@ export default {
       return randomString;
     },
 
-    async getAccessToken(code, state) {
+    async getAccessToken() {
       const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
       const SPOTIFY_CLIENT_SECRET = 'c947b3eb664844898f92f74e733969f0';
       const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
@@ -67,8 +72,8 @@ export default {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         data: new URLSearchParams({
-          code: code,
-          state: state,
+          code: this.code,
+          state: this.state,
           redirect_uri: SPOTIFY_REDIRECT_URI,
           grant_type: 'authorization_code'
         })
