@@ -46,6 +46,14 @@ export default {
 
     this.state = state;
     this.code = this.$route.query.code;
+
+    this.getAccessToken()
+    .then(token => {
+      console.log(token);
+    })
+    .catch(error => {
+      console.error(error);
+    });
   },
   methods: {
     generateRandomString(length) {
