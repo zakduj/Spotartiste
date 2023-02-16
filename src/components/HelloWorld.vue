@@ -2,42 +2,45 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <form>
-    <input type="text" placeholder="Rechercher...">
-    <button type="submit" @click.prevent="searchArtists">Go</button>
+      <input type="text" placeholder="Rechercher...">
+      <button type="submit" @click.prevent="searchArtists">Go</button>
     </form>
   </div>
 </template>
+
 <script>
-// import axios from 'axios';
+import axios from 'axios';
 
 export default {
   name: 'HelloWorld',
   data() {
     return {
-      stateKey: 'Spotify_auth_state'
+      stateKey: 'Spotify_auth_state',
+      accessToken: null,
+      refreshToken: null,
+      expiresIn: null,
+      artist: null
     };
   },
   props: {
     msg: String
   },
   mounted() {
-      const state = this.generateRandomString(16);
-      document.cookie = `${this.stateKey}=${state};max-age=3600`;
-      const scope = 'user-read-private user-read-email';
+    const state = this.generateRandomString(16);
+    document.cookie = `${this.stateKey}=${state};max-age=3600`;
+    const scope = 'user-read-private user-read-email';
 
-      const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
-      const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
-      
-      const searchParams = new URLSearchParams();
-      searchParams.set('client_id', SPOTIFY_CLIENT_ID);
-      searchParams.set('response_type', 'code');
-      searchParams.set('redirect_uri', SPOTIFY_REDIRECT_URI);
-      searchParams.set('state', state);
-      searchParams.set('scope', scope);
+    const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
+    const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
 
-      window.location.href = `https://accounts.spotify.com/authorize?${searchParams.toString()}`
+    const searchParams = new URLSearchParams();
+    searchParams.set('client_id', SPOTIFY_CLIENT_ID);
+    searchParams.set('response_type', 'code');
+    searchParams.set('redirect_uri', SPOTIFY_REDIRECT_URI);
+    searchParams.set('state', state);
+    searchParams.set('scope', scope);
 
-
+    window.location.href = `https://accounts.spotify.com/authorize?${searchParams.toString()}`
   },
   methods: {
     generateRandomString(length) {
@@ -50,27 +53,38 @@ export default {
 
       return randomString;
     },
-  },
-  // getAccessToken(code, state) {
-  //   const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
-  //   const SPOTIFY_CLIENT_SECRET = 'c947b3eb664844898f92f74e733969f0';
-  //   const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
-      
-    // const authOptions = {
-    //   method: 'POST',
-    //   url: 'https://accounts.spotify.com/api/token',
-    //   headers: {
-    //     'Authorization': 'Basic ' + Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString('base64'),
-    //     'Content-Type': 'application/x-www-form-urlencoded'
-    //   },
-    //   data: new URLSearchParams({
-    //     code: code,
-    //     redirect_uri: SPOTIFY_REDIRECT_URI,
-    //     grant_type: 'authorization_code'
-    //   }).toString(),
-    // }
-  // }
-} 
+
+    async getAccessToken(code, state) {
+      const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
+      const SPOTIFY_CLIENT_SECRET = 'c947b3eb664844898f92f74e733969f0';
+      const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
+
+      const authOptions = {
+        method: 'POST',
+        url: 'https://accounts.spotify.com/api/token',
+        headers: {
+          'Authorization': 'Basic ' + Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString('base64'),
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: new URLSearchParams({
+          code: code,
+          state: state,
+          redirect_uri: SPOTIFY_REDIRECT_URI,
+          grant_type: 'authorization_code'
+        })
+      };
+      try {
+        const response = await axios(authOptions);
+        if (response.status === 200) {
+          return response.data.access_token;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      return null;
+    },
+  }
+};
 </script>
 <style scoped>
 h3 {
