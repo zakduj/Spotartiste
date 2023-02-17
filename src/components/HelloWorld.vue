@@ -24,7 +24,10 @@ export default {
       artist: null,
       code: null,
       state: null,
-      loggedIn: false
+      loggedIn: false,
+      SPOTIFY_CLIENT_ID : 'ba07904c005743fc9b90cb3e6784ea04',
+      SPOTIFY_CLIENT_SECRET : 'c947b3eb664844898f92f74e733969f0',
+      SPOTIFY_REDIRECT_URI : 'http://localhost:8080/callback'
     };
   },
   props: {
@@ -36,13 +39,10 @@ export default {
       document.cookie = `${this.stateKey}=${state};max-age=3600`;
       const scope = 'user-read-private user-read-email';
 
-      const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
-      const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
-
       const searchParams = new URLSearchParams();
-      searchParams.set('client_id', SPOTIFY_CLIENT_ID);
+      searchParams.set('client_id', this.SPOTIFY_CLIENT_ID);
       searchParams.set('response_type', 'code');
-      searchParams.set('redirect_uri', SPOTIFY_REDIRECT_URI);
+      searchParams.set('redirect_uri', this.SPOTIFY_REDIRECT_URI);
       searchParams.set('state', state);
       searchParams.set('scope', scope);
 
@@ -72,21 +72,17 @@ export default {
     },
 
     async getAccessToken() {
-      const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
-      const SPOTIFY_CLIENT_SECRET = 'c947b3eb664844898f92f74e733969f0';
-      const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
-
       const authOptions = {
         method: 'POST',
         url: 'https://accounts.spotify.com/api/token',
         headers: {
-          'Authorization': 'Basic ' + Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString('base64'),
+          'Authorization': 'Basic ' + Buffer.from(`${this.SPOTIFY_CLIENT_ID}:${this.SPOTIFY_CLIENT_SECRET}`).toString('base64'),
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         data: new URLSearchParams({
           code: this.code,
           state: this.state,
-          redirect_uri: SPOTIFY_REDIRECT_URI,
+          redirect_uri: this.SPOTIFY_REDIRECT_URI,
           grant_type: 'authorization_code'
         })
       };
