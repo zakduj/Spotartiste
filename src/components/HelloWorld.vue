@@ -52,9 +52,10 @@ export default {
       this.code = this.$route.query.code;
 
       this.getAccessToken()
-      .then(token => {
-        console.log(token);
+      .then(response => {
+        this.response = JSON.stringify(response.data, null, 2);
         this.loggedIn = true;
+        console.log(response.data);
       })
       .catch(error => {
         console.error(error);
@@ -81,7 +82,6 @@ export default {
         },
         data: new URLSearchParams({
           code: this.code,
-          state: this.state,
           redirect_uri: this.SPOTIFY_REDIRECT_URI,
           grant_type: 'authorization_code'
         })
@@ -89,7 +89,7 @@ export default {
       try {
         const response = await axios(authOptions);
         if (response.status === 200) {
-          return response.data.access_token;
+          return response;
         }
       } catch (error) {
         console.error(error);
