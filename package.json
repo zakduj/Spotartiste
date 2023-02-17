@@ -13,6 +13,7 @@
     "dotenv": "^16.0.3",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
+    "spotify-web-api-js": "^1.5.2",
     "vue": "^3.2.13"
   },
   "devDependencies": {
