@@ -25,9 +25,9 @@ export default {
       code: null,
       state: null,
       loggedIn: false,
-      SPOTIFY_CLIENT_ID : 'ba07904c005743fc9b90cb3e6784ea04',
-      SPOTIFY_CLIENT_SECRET : 'c947b3eb664844898f92f74e733969f0',
-      SPOTIFY_REDIRECT_URI : 'http://localhost:8080/callback'
+      SPOTIFY_CLIENT_ID : process.env.SPOTIFY_CLIENT_ID,
+      SPOTIFY_CLIENT_SECRET : process.env.SPOTIFY_CLIENT_SECRET,
+      SPOTIFY_REDIRECT_URI : process.env.SPOTIFY_REDIRECT_URI
     };
   },
   props: {
