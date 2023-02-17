@@ -1,11 +1,12 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <form>
+    <form v-if="!loggedIn">
       <input type="text" placeholder="Rechercher...">
       <button type="submit" @click.prevent="searchArtists">Go</button>
+      <button type="button" @click="getLogin">Login</button>
     </form>
-    <button type="button" @click="getLogin">Login</button>
+    <button v-if="loggedIn" @click.prevent="logout">Logout</button>
   </div>
 </template>
 
@@ -22,7 +23,8 @@ export default {
       expiresIn: null,
       artist: null,
       code: null,
-      state: null
+      state: null,
+      loggedIn: false
     };
   },
   props: {
@@ -52,6 +54,7 @@ export default {
       this.getAccessToken()
       .then(token => {
         console.log(token);
+        this.loggedIn = true;
       })
       .catch(error => {
         console.error(error);
