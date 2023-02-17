@@ -5,6 +5,7 @@
       <input type="text" placeholder="Rechercher...">
       <button type="submit" @click.prevent="searchArtists">Go</button>
     </form>
+    <button type="button" @click="getLogin">Login</button>
   </div>
 </template>
 
@@ -27,35 +28,35 @@ export default {
   props: {
     msg: String
   },
-  mounted() {
-    const state = this.generateRandomString(16);
-    document.cookie = `${this.stateKey}=${state};max-age=3600`;
-    const scope = 'user-read-private user-read-email';
-
-    const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
-    const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
-
-    const searchParams = new URLSearchParams();
-    searchParams.set('client_id', SPOTIFY_CLIENT_ID);
-    searchParams.set('response_type', 'code');
-    searchParams.set('redirect_uri', SPOTIFY_REDIRECT_URI);
-    searchParams.set('state', state);
-    searchParams.set('scope', scope);
-
-    window.location.href = `https://accounts.spotify.com/authorize?${searchParams.toString()}`
-
-    this.state = state;
-    this.code = this.$route.query.code;
-
-    this.getAccessToken()
-    .then(token => {
-      console.log(token);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-  },
   methods: {
+    getLogin(){
+      const state = this.generateRandomString(16);
+      document.cookie = `${this.stateKey}=${state};max-age=3600`;
+      const scope = 'user-read-private user-read-email';
+
+      const SPOTIFY_CLIENT_ID = 'ba07904c005743fc9b90cb3e6784ea04';
+      const SPOTIFY_REDIRECT_URI ='http://localhost:8080/callback';
+
+      const searchParams = new URLSearchParams();
+      searchParams.set('client_id', SPOTIFY_CLIENT_ID);
+      searchParams.set('response_type', 'code');
+      searchParams.set('redirect_uri', SPOTIFY_REDIRECT_URI);
+      searchParams.set('state', state);
+      searchParams.set('scope', scope);
+
+      window.location.href = `https://accounts.spotify.com/authorize?${searchParams.toString()}`
+
+      this.state = state;
+      this.code = this.$route.query.code;
+
+      this.getAccessToken()
+      .then(token => {
+        console.log(token);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    },
     generateRandomString(length) {
       let randomString = '';
       let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
